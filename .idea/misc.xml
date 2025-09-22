@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="Elixir at /nix/store/6b8g23xgz6vzpg7hmk93w6p425i95pds-elixir-1.18.4/lib/elixir" project-jdk-type="Elixir SDK">
+    <output url="file://$PROJECT_DIR$/classes" />
+  </component>
+</project>

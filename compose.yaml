@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    working_dir: /app
+    environment:
+      - MIX_ENV=dev
+      - PORT=4040
+    command: ["mix", "run", "--no-halt"]
+    stdin_open: true
+    tty: true
+    ports:
+      - "4040:4040"
+    volumes:
+      - .:/app
