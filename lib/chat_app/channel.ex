@@ -4,7 +4,8 @@ defmodule ChatApp.Channel do
   - Verwalten von Clients
   - Join/Leave Mechanismen
   - Broadcast von Nachrichten
-  - Unterstützt Higher-Order Functions für flexible Nachrichtenformate
+  - Unterstützt Higher-Order Functions (Strategies) für flexible Nachrichtenformate
+  - Decorator: Nachrichten mit "!!" werden hervorgehoben
   """
 
   use GenServer
@@ -91,7 +92,9 @@ defmodule ChatApp.Channel do
 
   def handle_cast({:broadcast, message, transform_fun}, state) do
     Enum.each(state.clients, fn {_pid, {_user, sock}} ->
-      send_line(sock, transform_fun.(message))
+      decorated_msg = decorate_important(message)
+      final_msg = transform_fun.(decorated_msg)
+      send_line(sock, final_msg)
     end)
 
     {:noreply, state}
@@ -103,6 +106,19 @@ defmodule ChatApp.Channel do
   end
 
   defp via(name), do: {:via, Registry, {ChatApp.ChannelRegistry, name}}
+
+  defp decorate_important(msg) do
+    case Regex.run(~r/^(\[.*?\]\s*)(!!.*)/, msg) do
+      [_, prefix, "!!" <> rest] ->
+        prefix <> "!!! [WICHTIG] " <> String.trim_leading(rest) <> " !!!"
+
+      nil ->
+        case String.starts_with?(msg, "!!") do
+          true -> "!!! [WICHTIG] " <> String.trim_leading(String.trim_leading(msg, "!!")) <> " !!!"
+          false -> msg
+        end
+    end
+  end
 
   defp send_line(socket, text) do
     :gen_tcp.send(socket, text <> "\n")
