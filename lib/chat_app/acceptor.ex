@@ -1,4 +1,9 @@
 defmodule ChatApp.Acceptor do
+  @moduledoc """
+  Startet den TCP-Server und akzeptiert eingehende Clients.
+  Jeder Client wird in einem eigenen Prozess behandelt.
+  """
+
   require Logger
 
   def listen(port) do

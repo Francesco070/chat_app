@@ -1,8 +1,17 @@
 defmodule ChatApp.Client do
+  @moduledoc """
+  Handhabt die Kommunikation mit einem einzelnen Client.
+  - Begrüssung und Username-Abfrage
+  - Command-Handling (/help, /join, /leave, /who, /quit)
+  - Nachrichtensenden via Channel.broadcast
+  - Beendet Verbindung korrekt bei Disconnect
+  """
+
   require Logger
 
   def start(socket) do
     send_line(socket, "Willkommen! Bitte gib deinen Benutzernamen ein:")
+
     case recv_line(socket) do
       {:ok, username} ->
         username = String.trim(username)
@@ -75,7 +84,7 @@ defmodule ChatApp.Client do
     channel = String.trim(rest)
     leave_channel(state)
 
-    case ChatApp.Channel.get_or_create(channel) do
+    case ChatApp.ChannelFactory.create(channel) do
       {:ok, pid} ->
         ChatApp.Channel.join(pid, self(), state.username, state.socket)
         send_line(state.socket, "Beigetreten: #{channel}")

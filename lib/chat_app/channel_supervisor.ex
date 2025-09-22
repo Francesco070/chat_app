@@ -1,4 +1,9 @@
 defmodule ChatApp.ChannelSupervisor do
+  @moduledoc """
+  DynamicSupervisor für Channels.
+  Verwaltet die Erstellung und Überwachung von Channel-Prozessen.
+  """
+
   use DynamicSupervisor
 
   def start_link(_), do: DynamicSupervisor.start_link(__MODULE__, :ok, name: __MODULE__)
