@@ -1,12 +1,12 @@
-# Chat Server mit Elixir
+# Chat Server with Elixir
 
-## Schnellstart
+## Quickstart
 
 ```bash
 docker-compose up --build
 ```
 
-oder mit mix:
+or with mix:
 
 ```bash
 mix deps.get
@@ -14,35 +14,36 @@ mix compile
 mix run --no-halt
 ```
 
-Der Server läuft auf Port 4000.
+The server runs on port 4040.
 
-
-
-## Verbinden
+## Connect
 
 ```bash
-telnet localhost 4000
+telnet localhost 4040
 ```
 
-Oder mit netcat:
+Or with netcat:
+
 ```bash
-nc localhost 4000
+nc localhost 4040
 ```
 
-## Funktionen
+## Features
 
-### Was der Chat kann:
-- **Username-Eingabe**: Jeder User muss einen Namen eingeben
-- **Channel-Liste**: Alle aktiven Channels
-- **Channel beitreten**: Neue oder existierende Channels betreten
-- **Echtzeit-Chat**: Nachrichten werden sofort an alle Channel-Mitglieder gesendet
-- **Username-Anzeige**: Jede Nachricht zeigt den Absender
-- **Automatisches Cleanup**: User werden automatisch entfernt bei Disconnect
-- **Multiple Channels**: Mehrere Channels können gleichzeitig laufen
+### What the chat can do:
+
+* **Username input**: Every user must enter a name
+* **Channel list**: View all active channels
+* **Join channel**: Join new or existing channels
+* **Real-time chat**: Messages are instantly sent to all channel members
+* **Username display**: Every message shows the sender
+* **Automatic cleanup**: Users are automatically removed on disconnect
+* **Multiple channels**: Several channels can run simultaneously
 
 ### Actor Model
-- Jeder Channel ist ein eigener GenServer-Prozess
-- Nachrichten werden zwischen Prozessen ausgetauscht
-- Automatisches Fehler-Handling durch Supervisor
 
-![GenServer Grafik](https://miro.medium.com/v2/resize:fit:720/format:webp/1*Kll_Xxko91JKaS0rzM9XpQ.png)
+* Each channel is its own GenServer process
+* Messages are exchanged between processes
+* Automatic error handling via Supervisor
+
+![GenServer Graphic](https://miro.medium.com/v2/resize\:fit:720/format\:webp/1*Kll_Xxko91JKaS0rzM9XpQ.png)
