@@ -46,4 +46,4 @@ nc localhost 4040
 * Messages are exchanged between processes
 * Automatic error handling via Supervisor
 
-![GenServer Graphic](https://miro.medium.com/v2/resize\:fit:720/format\:webp/1*Kll_Xxko91JKaS0rzM9XpQ.png)
+![GenServer Grafik](https://miro.medium.com/v2/resize:fit:720/format:webp/1*Kll_Xxko91JKaS0rzM9XpQ.png)
