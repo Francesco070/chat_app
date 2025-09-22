@@ -118,7 +118,6 @@ defmodule ChatApp.Client do
     state
   end
 
-  # Hilfsfunktionen
   defp leave_channel(%{channel: nil}), do: :ok
   defp leave_channel(%{channel: chan, username: username}) when not is_nil(chan) do
     case ChatApp.Channel.whereis(chan) do

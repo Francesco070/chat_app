@@ -1,7 +1,6 @@
 defmodule ChatApp.Channel do
   use GenServer
 
-  # Public API
   def start_link(name) do
     GenServer.start_link(__MODULE__, name, name: via(name))
   end
@@ -55,7 +54,6 @@ defmodule ChatApp.Channel do
     Process.monitor(client_pid)
     clients = Map.put(state.clients, client_pid, {username, socket})
 
-    # Alle Clients informieren (Pattern benutzt _-Variablen, damit keine Warnungen kommen)
     Enum.each(clients, fn {_pid, {_user, sock}} ->
       send_line(sock, "#{username} ist dem Channel #{state.name} beigetreten.")
     end)
@@ -91,7 +89,6 @@ defmodule ChatApp.Channel do
     {:noreply, %{state | clients: clients}}
   end
 
-  # Hilfsfunktionen
   defp via(name), do: {:via, Registry, {ChatApp.ChannelRegistry, name}}
 
   defp send_line(socket, text) do
