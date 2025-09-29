@@ -1,7 +1,5 @@
 # Chat Server with Elixir
 
-![Architectural sketch](doc/img/ArchitekturSkizzeChatApp.png)
-
 ## Quickstart
 
 ```bash
@@ -29,6 +27,9 @@ Or with netcat:
 ```bash
 nc localhost 4040
 ```
+
+## Architecture
+![Architectural sketch](doc/img/ArchitekturSkizzeChatApp.png)
 
 ## Features
 
