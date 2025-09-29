@@ -65,7 +65,7 @@ defmodule ChatApp.Channel do
   end
 
   def handle_call({:join, client_pid, username, socket}, _from, state) do
-    Process.monitor(client_pid)
+    Process.monitor(client_pid) # Falls der Client später abstürzt oder beendet wird => automatisch "tote clients" entfernen
     clients = Map.put(state.clients, client_pid, {username, socket})
 
     Enum.each(clients, fn {_pid, {_user, sock}} ->
