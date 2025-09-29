@@ -1,5 +1,7 @@
 # Chat Server with Elixir
 
+![Architectural sketch](doc/img/ArchitekturSkizzeChatApp.png)
+
 ## Quickstart
 
 ```bash
