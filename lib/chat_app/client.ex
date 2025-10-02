@@ -1,21 +1,21 @@
 defmodule ChatApp.Client do
   @moduledoc """
-  Handhabt die Kommunikation mit einem einzelnen Client.
-  - Begrüssung und Username-Abfrage
-  - Command-Handling (/help, /join, /leave, /who, /quit)
-  - Nachrichtensenden via Channel.broadcast
-  - Beendet Verbindung korrekt bei Disconnect
+  Handles communication with a single client.
+  - Greeting and username prompt
+  - Command handling (/help, /join, /leave, /who, /quit)
+  - Sending messages via Channel.broadcast
+  - Closes connection properly on disconnect
   """
 
   require Logger
 
   def start(socket) do
-    send_line(socket, "Willkommen! Bitte gib deinen Benutzernamen ein:")
+    send_line(socket, "Welcome! Please enter your username:")
 
     case recv_line(socket) do
       {:ok, username} ->
         username = String.trim(username)
-        send_line(socket, "Hallo #{username}! Tippe /help für Befehle.")
+        send_line(socket, "Hello #{username}! Type /help for commands.")
         loop(%{socket: socket, username: username, channel: nil})
 
       {:error, _} ->
@@ -41,7 +41,7 @@ defmodule ChatApp.Client do
               ChatApp.Channel.broadcast(state.channel, "[#{state.username}] #{line}")
               loop(state)
             else
-              send_line(state.socket, "Du bist in keinem Channel. Benutze /join <name> oder /list")
+              send_line(state.socket, "You are not in any channels. Use /join <name> or /list")
               loop(state)
             end
         end
@@ -57,15 +57,15 @@ defmodule ChatApp.Client do
     end
   end
 
-  # Befehle
+  # Commands
   defp handle_command("/help", state) do
     send_line(state.socket, """
-    Verfuegbare Befehle:
-    /list                - zeigt laufende Channels
-    /join <name>         - join oder erstelle Channel
-    /leave               - verlasse aktuellen Channel
-    /who <channel>       - zeige user im Channel
-    /quit                - beende Verbindung
+    Available commands:
+    /list                - shows active channels
+    /join <name>         - join or create a channel
+    /leave               - leave the current channel
+    /who <channel>       - show users in the channel
+    /quit                - end the connection
     """)
     state
   end
@@ -73,9 +73,9 @@ defmodule ChatApp.Client do
   defp handle_command("/list", state) do
     channels = ChatApp.Channel.list_channels()
     if channels == [] do
-      send_line(state.socket, "Keine Channels aktiv.")
+      send_line(state.socket, "No active channels.")
     else
-      send_line(state.socket, "Aktive Channels: #{Enum.join(channels, ", ")}")
+      send_line(state.socket, "Active channels: #{Enum.join(channels, ", ")}")
     end
     state
   end
@@ -87,11 +87,11 @@ defmodule ChatApp.Client do
     case ChatApp.ChannelFactory.create(channel) do
       {:ok, pid} ->
         ChatApp.Channel.join(pid, self(), state.username, state.socket)
-        send_line(state.socket, "Beigetreten: #{channel}")
+        send_line(state.socket, "Joined: #{channel}")
         %{state | channel: channel}
 
       {:error, reason} ->
-        send_line(state.socket, "Fehler beim Betreten des Channels: #{inspect(reason)}")
+        send_line(state.socket, "Error joining the channel: #{inspect(reason)}")
         state
     end
   end
@@ -106,24 +106,24 @@ defmodule ChatApp.Client do
 
     case ChatApp.Channel.whereis(channel) do
       nil ->
-        send_line(state.socket, "Channel #{channel} existiert nicht.")
+        send_line(state.socket, "Channel #{channel} does not exist.")
       pid ->
         users = ChatApp.Channel.users(pid)
-        send_line(state.socket, "User in #{channel}: #{Enum.join(users, ", ")}")
+        send_line(state.socket, "Users in #{channel}: #{Enum.join(users, ", ")}")
     end
 
     state
   end
 
   defp handle_command("/quit", state) do
-    send_line(state.socket, "Tschau!")
+    send_line(state.socket, "Bye!")
     leave_channel(state)
     close(state.socket)
     exit(:normal)
   end
 
   defp handle_command(_unknown, state) do
-    send_line(state.socket, "Unbekannter Befehl. /help für Liste.")
+    send_line(state.socket, "Unknown command. /help for list.")
     state
   end
 

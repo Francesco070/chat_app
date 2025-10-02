@@ -1,6 +1,6 @@
 defmodule ChatApp.ChannelFactory do
   @moduledoc """
-  Factory Pattern: Kapselt die Erstellung von Channels über den Supervisor.
+  Factory Pattern: Encapsulates the creation of channels via the supervisor.
   """
 
   def create(name) do

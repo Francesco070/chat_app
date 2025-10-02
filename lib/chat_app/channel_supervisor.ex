@@ -1,7 +1,7 @@
 defmodule ChatApp.ChannelSupervisor do
   @moduledoc """
-  DynamicSupervisor für Channels.
-  Verwaltet die Erstellung und Überwachung von Channel-Prozessen.
+  DynamicSupervisor for channels.
+  Manages the creation and supervision of channel processes.
   """
 
   use DynamicSupervisor

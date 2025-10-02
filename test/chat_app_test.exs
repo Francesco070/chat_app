@@ -1,25 +1,25 @@
 defmodule ChatAppTest do
   use ExUnit.Case
 
-  test "MessageStrategy.shout macht Text GROSS" do
-    assert ChatApp.MessageStrategy.shout("hallo") == "HALLO"
+  test "MessageStrategy.shout makes text uppercase" do
+    assert ChatApp.MessageStrategy.shout("hello") == "HELLO"
   end
 
-  test "MessageStrategy.plain lässt Text unverändert" do
+  test "MessageStrategy.plain leaves text unchanged" do
     assert ChatApp.MessageStrategy.plain("test123") == "test123"
   end
 
-  test "MessageStrategy.bracket fügt '[Message]' hinzu" do
+  test "MessageStrategy.bracket adds '[Message]'" do
     assert ChatApp.MessageStrategy.bracket("abc") == "[Message] abc"
   end
 
-  test "Channel kann gestartet und gefunden werden" do
+  test "Channel can be started and found" do
     {:ok, pid} = ChatApp.Channel.start_link("testchannel")
     assert is_pid(pid)
     assert ChatApp.Channel.whereis("testchannel") == pid
   end
 
-  test "Channel akzeptiert einen Join und liefert User-Liste zurück" do
+  test "Channel accepts a join and returns the user list" do
     {:ok, pid} = ChatApp.Channel.start_link("joinchannel")
 
     {:ok, sock} = :gen_tcp.listen(0, [:binary, active: false])
@@ -30,14 +30,14 @@ defmodule ChatAppTest do
     assert "alice" in users
   end
 
-  test "Channel broadcastet Nachricht mit Strategy" do
+  test "Channel broadcasts messages with a strategy" do
     {:ok, pid} = ChatApp.Channel.start_link("broadcastchannel")
 
     {:ok, sock} = :gen_tcp.listen(0, [:binary, active: false])
     ChatApp.Channel.join(pid, self(), "bob", sock)
 
     ChatApp.Channel.broadcast(pid, "hello", &ChatApp.MessageStrategy.plain/1)
-    ChatApp.Channel.broadcast(pid, "achtung", &ChatApp.MessageStrategy.shout/1)
+    ChatApp.Channel.broadcast(pid, "caution", &ChatApp.MessageStrategy.shout/1)
 
     assert true
   end

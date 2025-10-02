@@ -1,21 +1,21 @@
 defmodule ChatApp.Channel do
   @moduledoc """
-  Implementiert einen Chat-Channel als GenServer.
-  - Verwalten von Clients
-  - Join/Leave Mechanismen
-  - Broadcast von Nachrichten
-  - Unterstützt Higher-Order Functions (Strategies) für flexible Nachrichtenformate
-  - Decorator: Nachrichten mit "!!" werden hervorgehoben
+  Implements a chat channel as a GenServer.
+  - Management of clients
+  - Join/Leave mechanisms
+  - Broadcasting messages
+  - Supports higher-order functions (strategies) for flexible message formats
+  - Decorator: Messages with "!!" are highlighted
   """
 
   use GenServer
 
-  # Startet einen Channel
+  # Starts a Channel
   def start_link(name) do
     GenServer.start_link(__MODULE__, name, name: via(name))
   end
 
-  # Holt oder erstellt einen Channel
+  # Get or create a Channel
   def get_or_create(name) when is_binary(name) do
     case whereis(name) do
       nil ->
@@ -65,11 +65,11 @@ defmodule ChatApp.Channel do
   end
 
   def handle_call({:join, client_pid, username, socket}, _from, state) do
-    Process.monitor(client_pid) # Falls der Client später abstürzt oder beendet wird => automatisch "tote clients" entfernen
+    Process.monitor(client_pid) # Automatically remove "dead clients" if the client crashes or is terminated later
     clients = Map.put(state.clients, client_pid, {username, socket})
 
     Enum.each(clients, fn {_pid, {_user, sock}} ->
-      send_line(sock, "#{username} ist dem Channel #{state.name} beigetreten.")
+      send_line(sock, "#{username} joined the channel #{state.name}.")
     end)
 
     {:reply, :ok, %{state | clients: clients}}
@@ -79,7 +79,7 @@ defmodule ChatApp.Channel do
     clients = Map.delete(state.clients, client_pid)
 
     Enum.each(clients, fn {_pid, {_user, sock}} ->
-      send_line(sock, "#{username} hat den Channel verlassen.")
+      send_line(sock, "#{username} left the channel.")
     end)
 
     {:reply, :ok, %{state | clients: clients}}
@@ -110,11 +110,11 @@ defmodule ChatApp.Channel do
   defp decorate_important(msg) do
     case Regex.run(~r/^(\[.*?\]\s*)(!!.*)/, msg) do
       [_, prefix, "!!" <> rest] ->
-        prefix <> "!!! [WICHTIG] " <> String.trim_leading(rest) <> " !!!"
+        prefix <> "!!! [IMPORTANT] " <> String.trim_leading(rest) <> " !!!"
 
       nil ->
         case String.starts_with?(msg, "!!") do
-          true -> "!!! [WICHTIG] " <> String.trim_leading(String.trim_leading(msg, "!!")) <> " !!!"
+          true -> "!!! [IMPORTANT] " <> String.trim_leading(String.trim_leading(msg, "!!")) <> " !!!"
           false -> msg
         end
     end

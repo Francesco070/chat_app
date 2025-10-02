@@ -1,7 +1,7 @@
 defmodule ChatApp.Acceptor do
   @moduledoc """
-  Startet den TCP-Server und akzeptiert eingehende Clients.
-  Jeder Client wird in einem eigenen Prozess behandelt.
+  Starts the TCP server and accepts incoming clients.
+  Each client is handled in its own process.
   """
 
   require Logger

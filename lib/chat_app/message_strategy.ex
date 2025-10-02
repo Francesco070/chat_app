@@ -1,6 +1,6 @@
 defmodule ChatApp.MessageStrategy do
   @moduledoc """
-  Strategy Pattern: Verschiedene Arten, Nachrichten zu formatieren.
+  Strategy Pattern: Different ways to format messages.
   """
 
   def plain(msg), do: msg
