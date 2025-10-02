@@ -29,7 +29,7 @@ nc localhost 4040
 ```
 
 ## Architecture
-![Architectural sketch](doc/img/ArchitekturSkizzeChatApp.png)
+![Architectural sketch](doc/img/ArchitectureSketchChatApp.png)
 
 ## Features
 
