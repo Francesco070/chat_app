@@ -34,8 +34,8 @@ COPY --from=build /app/_build/prod/rel/chat_app ./
 # Non-root user
 RUN addgroup -g 1000 chat && \
     adduser -D -s /bin/sh -u 1000 -G chat chat && \
-    chown -R chat:chat /app && \
-    mkdir -p /app/tmp && chown chat:chat /app/tmp
+    mkdir -p /app/tmp && chown -R chat:chat /app && \
+    chmod 1777 /app/tmp /tmp
 
 USER chat
 
