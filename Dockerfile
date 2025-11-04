@@ -17,7 +17,7 @@ COPY lib lib
 
 RUN mix compile
 
-RUN mix release chat_app --overwrite --verbose
+RUN mix release chat_app --overwrite
 
 RUN ls -laR /app/_build/prod/rel/chat_app/bin/
 
