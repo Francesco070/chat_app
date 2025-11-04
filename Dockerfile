@@ -1,5 +1,5 @@
 # ---- BUILD STAGE ----
-FROM hexpm/elixir:1.15.2-erlang-26.0-alpine AS build
+FROM hexpm/elixir:1.18.2-erlang-26.2.5.7-alpine-3.18.9 AS build
 
 RUN apk add --no-cache build-base git
 
