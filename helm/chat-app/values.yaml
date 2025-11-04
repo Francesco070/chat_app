@@ -68,18 +68,6 @@ service:
 env:
   - name: PORT
     value: "4040"
-  - name: PHX_HOST
-    value: "chat-app.example.com"
-  - name: SECRET_KEY_BASE
-    valueFrom:
-      secretKeyRef:
-        name: chat-app-secrets
-        key: secret-key-base
-  - name: RELEASE_COOKIE
-    valueFrom:
-      secretKeyRef:
-        name: chat-app-secrets
-        key: release-cookie
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
@@ -150,16 +138,14 @@ resources:
 
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
-  httpGet:
-    path: /health
+  tcpSocket:
     port: 4040
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 3
 readinessProbe:
-  httpGet:
-    path: /health
+  tcpSocket:
     port: 4040
   initialDelaySeconds: 20
   periodSeconds: 5
@@ -194,8 +180,7 @@ tolerations: []
 affinity: {}
 
 startupProbe:
-  httpGet:
-    path: /health
+  tcpSocket:
     port: 4040
   initialDelaySeconds: 10
   periodSeconds: 5
