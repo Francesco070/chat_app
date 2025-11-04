@@ -34,20 +34,10 @@ WORKDIR /app
 
 COPY --from=build /app/_build/prod/rel/chat_app ./
 
-RUN addgroup -g 1000 chat && \
-    adduser -D -s /bin/sh -u 1000 -G chat chat && \
-    chown -R chat:chat /app && \
-    mkdir -p /app/tmp && \
-    chown chat:chat /app/tmp && \
-    chmod 1777 /tmp
-
-USER chat
-
 EXPOSE 4040
 
 ENV PORT=4040
 ENV MIX_ENV=prod
 ENV HOME=/app
-ENV RELEASE_TMP=/app/tmp
 
 CMD ["/app/bin/chat_app", "start"]
