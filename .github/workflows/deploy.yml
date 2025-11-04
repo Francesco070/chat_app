@@ -33,7 +33,6 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          # Kleinbuchstaben für den Repository-Namen (wichtig!)
           IMAGE_NAME=ghcr.io/francesco070/chat_app:latest
           
           docker build -t $IMAGE_NAME .
