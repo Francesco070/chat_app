@@ -44,8 +44,6 @@ spec:
             - name: tcp
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          command: [ "mix" ]
-          args: [ "run", "--no-halt" ]
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
