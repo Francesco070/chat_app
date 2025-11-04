@@ -25,11 +25,11 @@ WORKDIR /app
 
 COPY --from=build /app/_build/prod/rel/chat_app ./
 
-RUN chmod -R 777 /app /tmp
+RUN #chmod -R 777 /app /tmp
 
 ENV PORT=4040
 ENV MIX_ENV=prod
-ENV TMPDIR=/tmp
+#ENV TMPDIR=/tmp
 
 EXPOSE 4040
 
