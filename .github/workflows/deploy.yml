@@ -5,6 +5,8 @@ on:
     workflows: ["Elixir CI"]
     types:
       - completed
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -12,7 +14,10 @@ permissions:
 
 jobs:
   build-and-push:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: |
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
 
@@ -26,10 +31,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image
+      - name: Build and push Docker image
         run: |
-          docker build -t ghcr.io/francesco070/chat_app:latest .
+          # Kleinbuchstaben für den Repository-Namen (wichtig!)
+          IMAGE_NAME=ghcr.io/francesco070/chat_app:latest
+          
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
 
-      - name: Push Docker image
-        run: |
-          docker push ghcr.io/francesco070/chat_app:latest
+      - name: Delete old package versions
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: 'chat_app'
+          package-type: 'container'
+          min-versions-to-keep: 1
+          delete-only-untagged-versions: 'false'
