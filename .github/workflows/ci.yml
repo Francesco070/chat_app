@@ -71,9 +71,10 @@ jobs:
           docker push $IMAGE_NAME
 
       - name: Delete old package versions
+        continue-on-error: true
         uses: actions/delete-package-versions@v4
         with:
           package-name: 'chat_app'
           package-type: 'container'
           min-versions-to-keep: 1
-          delete-only-untagged-versions: 'false'
+          delete-only-untagged-versions: 'true'
