@@ -5,7 +5,8 @@ RUN apk add --no-cache build-base git
 
 WORKDIR /app
 
-RUN mix local.hex --force && mix local.rebar --force
+RUN mix local.hex --force && \
+    mix local.rebar --force
 
 COPY mix.exs mix.lock ./
 ENV MIX_ENV=prod
@@ -31,19 +32,20 @@ WORKDIR /app
 
 COPY --from=build /app/_build/prod/rel/chat_app ./
 
-# Non-root user
 RUN addgroup -g 1000 chat && \
     adduser -D -s /bin/sh -u 1000 -G chat chat && \
-    mkdir -p /app/tmp && chown -R chat:chat /app && \
-    chmod 1777 /app/tmp /tmp
+    chown -R chat:chat /app && \
+    mkdir -p /app/tmp && \
+    chown -R chat:chat /app/tmp && \
+    chmod 1777 /tmp
 
 USER chat
 
-ENV PORT=4040
 ENV MIX_ENV=prod
+ENV PORT=4040
 ENV HOME=/app
-ENV TMPDIR=/app/tmp
 ENV RELEASE_TMP=/app/tmp
+ENV TMPDIR=/app/tmp
 
 EXPOSE 4040
 
