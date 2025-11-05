@@ -21,22 +21,14 @@ FROM alpine:3.18
 
 RUN apk add --no-cache bash openssl ncurses-libs libstdc++ libgcc
 
-# Create non-root user
-RUN addgroup -g 1000 chatapp && \
-    adduser -D -u 1000 -G chatapp chatapp
-
 WORKDIR /app
 
-COPY --from=build --chown=1000:1000 /app/_build/prod/rel/chat_app ./
+COPY --from=build /app/_build/prod/rel/chat_app ./
 
-# Create and set permissions for tmp directory
-RUN mkdir -p /tmp && chown -R 1000:1000 /tmp
-
-USER 1000
+RUN chmod -R 777 /app /tmp
 
 ENV PORT=4040
 ENV MIX_ENV=prod
-ENV RELEASE_TMP=/tmp
 
 EXPOSE 4040
 

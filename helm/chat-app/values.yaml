@@ -39,20 +39,20 @@ podAnnotations: {}
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 podLabels: {}
 
-podSecurityContext:
-  runAsNonRoot: true
-  runAsUser: 1000
-  fsGroup: 1000
+podSecurityContext: {}
+#  runAsNonRoot: true
+#  runAsUser: 1000
+#  fsGroup: 1000
   # fsGroup: 2000
 
-securityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-      - ALL
-  readOnlyRootFilesystem: false
-  runAsNonRoot: true
-  runAsUser: 1000
+securityContext: {}
+#  allowPrivilegeEscalation: false
+#  capabilities:
+#    drop:
+#      - ALL
+#  readOnlyRootFilesystem: false
+#  runAsNonRoot: true
+#  runAsUser: 1000
 
 # This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
@@ -141,15 +141,11 @@ livenessProbe:
     port: 4040
   initialDelaySeconds: 30
   periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 3
 readinessProbe:
   tcpSocket:
     port: 4040
-  initialDelaySeconds: 20
+  initialDelaySeconds: 10
   periodSeconds: 5
-  timeoutSeconds: 3
-  failureThreshold: 3
 
 # This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
@@ -181,6 +177,6 @@ affinity: {}
 startupProbe:
   tcpSocket:
     port: 4040
-  initialDelaySeconds: 10
+  initialDelaySeconds: 5
   periodSeconds: 5
   failureThreshold: 12
