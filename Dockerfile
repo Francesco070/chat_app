@@ -12,8 +12,11 @@ RUN mix local.hex --force && mix local.rebar --force
 RUN mix deps.get --only prod
 RUN mix deps.compile
 
-COPY . .
+COPY lib ./lib
+COPY test ./test
+
 RUN mix compile
+
 RUN mix release chat_app --overwrite
 
 # ---- RELEASE STAGE ----

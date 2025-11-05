@@ -65,8 +65,10 @@ service:
 env:
   - name: PORT
     value: "4040"
-  - name: RELEASE_TMP
-    value: "/tmp"
+  - name: MIX_ENV
+    value: "prod"
+  - name: RELEASE_NODE
+    value: "chat_app@127.0.0.1"
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
@@ -144,7 +146,7 @@ livenessProbe:
 readinessProbe:
   tcpSocket:
     port: 4040
-  initialDelaySeconds: 10
+  initialDelaySeconds: 20
   periodSeconds: 5
 
 # This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
@@ -177,6 +179,6 @@ affinity: {}
 startupProbe:
   tcpSocket:
     port: 4040
-  initialDelaySeconds: 5
+  initialDelaySeconds: 10
   periodSeconds: 5
   failureThreshold: 12
