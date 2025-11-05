@@ -44,7 +44,6 @@ podSecurityContext:
   runAsUser: 1000
   fsGroup: 1000
   # fsGroup: 2000
-  readOnlyRootFilesystem: false
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -66,6 +65,8 @@ service:
 env:
   - name: PORT
     value: "4040"
+  - name: RELEASE_TMP
+    value: "/tmp"
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
