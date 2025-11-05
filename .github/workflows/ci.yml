@@ -65,10 +65,13 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          IMAGE_NAME=ghcr.io/francesco070/chat_app:latest
+          IMAGE_TAG="${{ github.sha }}"
+          IMAGE_NAME=ghcr.io/francesco070/chat_app:${IMAGE_TAG}
+          IMAGE_LATEST=ghcr.io/francesco070/chat_app:latest
           
-          docker build -t $IMAGE_NAME .
+          docker build -t $IMAGE_NAME -t $IMAGE_LATEST .
           docker push $IMAGE_NAME
+          docker push $IMAGE_LATEST
 
       - name: Make image public
         run: |

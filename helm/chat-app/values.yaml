@@ -9,7 +9,7 @@ replicaCount: 2
 image:
   repository: ghcr.io/francesco070/chat_app
   # This sets the pull policy for images.
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
