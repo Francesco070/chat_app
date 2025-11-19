@@ -4,19 +4,13 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    working_dir: /app
+      dockerfile: Dockerfile
     environment:
-      - MIX_ENV=dev
+      - MIX_ENV=prod
       - PORT=4040
-    stdin_open: true
-    tty: true
     ports:
       - "4040:4040"
-    volumes:
-      - .:/app
-      - /app/_build
-      - /app/deps
+    restart: unless-stopped
     networks:
       - chat_network
 

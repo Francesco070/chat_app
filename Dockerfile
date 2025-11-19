@@ -7,16 +7,21 @@ WORKDIR /app
 
 ENV MIX_ENV=prod
 
+# Install Hex + Rebar
+RUN mix local.hex --force && \
+    mix local.rebar --force
+
+# Copy dependency files
 COPY mix.exs mix.lock ./
-RUN mix local.hex --force && mix local.rebar --force
 RUN mix deps.get --only prod
 RUN mix deps.compile
 
+# Copy application code
 COPY lib ./lib
-COPY test ./test
+COPY config ./config
 
+# Compile and build release
 RUN mix compile
-
 RUN mix release chat_app --overwrite
 
 # ---- RELEASE STAGE ----
@@ -28,7 +33,7 @@ WORKDIR /app
 
 COPY --from=build /app/_build/prod/rel/chat_app ./
 
-RUN chmod -R 777 /app /tmp
+RUN chmod -R 755 /app
 
 ENV PORT=4040
 ENV MIX_ENV=prod

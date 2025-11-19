@@ -1,0 +1,25 @@
+FROM hexpm/elixir:1.18.2-erlang-26.2.5.7-alpine-3.18.9
+
+RUN apk add --no-cache build-base git inotify-tools
+
+WORKDIR /app
+
+# Install Hex + Rebar
+RUN mix local.hex --force && \
+    mix local.rebar --force
+
+# Copy dependency files first (for better caching)
+COPY mix.exs mix.lock ./
+
+# Install dependencies
+RUN mix deps.get
+
+# Copy application code
+COPY . .
+
+ENV MIX_ENV=dev
+ENV PORT=4040
+
+EXPOSE 4040
+
+CMD ["mix", "run", "--no-halt"]

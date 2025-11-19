@@ -1,0 +1,33 @@
+  # Git
+  .git
+  .gitignore
+
+  # Mix
+  /_build
+  /deps
+  *.ez
+
+# Development
+  .elixir_ls
+  .vscode
+
+  # Documentation
+  /doc
+
+  # Tests
+  /test
+  /cover
+
+  # CI/CD
+  .github
+
+  # Docker
+  Dockerfile*
+  compose*.yaml
+  .dockerignore
+
+# Misc
+  *.swp
+  *.swo
+  *~
+  .DS_Store
