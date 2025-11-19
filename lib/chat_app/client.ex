@@ -47,7 +47,7 @@ defmodule ChatApp.Client do
         end
 
       {:error, :closed} ->
-        Logger.info("Client disconnected #{inspect self()}")
+        Logger.info("Client disconnected #{inspect(self())}")
         leave_channel(state)
         close(state.socket)
 
@@ -67,16 +67,19 @@ defmodule ChatApp.Client do
     /who <channel>       - show users in the channel
     /quit                - end the connection
     """)
+
     state
   end
 
   defp handle_command("/list", state) do
     channels = ChatApp.Channel.list_channels()
+
     if channels == [] do
       send_line(state.socket, "No active channels.")
     else
       send_line(state.socket, "Active channels: #{Enum.join(channels, ", ")}")
     end
+
     state
   end
 
@@ -107,6 +110,7 @@ defmodule ChatApp.Client do
     case ChatApp.Channel.whereis(channel) do
       nil ->
         send_line(state.socket, "Channel #{channel} does not exist.")
+
       pid ->
         users = ChatApp.Channel.users(pid)
         send_line(state.socket, "Users in #{channel}: #{Enum.join(users, ", ")}")
@@ -128,6 +132,7 @@ defmodule ChatApp.Client do
   end
 
   defp leave_channel(%{channel: nil}), do: :ok
+
   defp leave_channel(%{channel: chan, username: username}) when not is_nil(chan) do
     case ChatApp.Channel.whereis(chan) do
       nil -> :ok

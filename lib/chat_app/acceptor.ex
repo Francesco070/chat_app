@@ -13,7 +13,7 @@ defmodule ChatApp.Acceptor do
         packet: :line,
         active: false,
         reuseaddr: true,
-        ip: {0,0,0,0}
+        ip: {0, 0, 0, 0}
       ])
 
     Logger.info("Chat server listening on port #{port}")

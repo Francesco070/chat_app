@@ -65,7 +65,8 @@ defmodule ChatApp.Channel do
   end
 
   def handle_call({:join, client_pid, username, socket}, _from, state) do
-    Process.monitor(client_pid) # Automatically remove "dead clients" if the client crashes or is terminated later
+    # Automatically remove "dead clients" if the client crashes or is terminated later
+    Process.monitor(client_pid)
     clients = Map.put(state.clients, client_pid, {username, socket})
 
     Enum.each(clients, fn {_pid, {_user, sock}} ->
@@ -114,8 +115,11 @@ defmodule ChatApp.Channel do
 
       nil ->
         case String.starts_with?(msg, "!!") do
-          true -> "!!! [IMPORTANT] " <> String.trim_leading(String.trim_leading(msg, "!!")) <> " !!!"
-          false -> msg
+          true ->
+            "!!! [IMPORTANT] " <> String.trim_leading(String.trim_leading(msg, "!!")) <> " !!!"
+
+          false ->
+            msg
         end
     end
   end
