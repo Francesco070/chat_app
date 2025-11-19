@@ -18,7 +18,6 @@ RUN mix deps.compile
 
 # Copy application code
 COPY lib ./lib
-COPY config ./config
 
 # Compile and build release
 RUN mix compile
